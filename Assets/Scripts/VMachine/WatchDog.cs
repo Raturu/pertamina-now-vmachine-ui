@@ -4,7 +4,6 @@ using System.IO.Ports;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SerialReadLib;
 
 public class WatchDog : MonoBehaviour {
 
@@ -32,7 +31,7 @@ public class WatchDog : MonoBehaviour {
 
         port.Open();
 
-        if (!port.IsOpen) Debug.LogError("PORT IS NOT OPENED");
+        if (!port.IsOpen) Debug.LogError("PORT IS NOT OPENED.");
     }
 
     void SerialRead() {
