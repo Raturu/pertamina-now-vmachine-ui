@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,19 +12,18 @@ public class VMachineApplication : Singleton<VMachineApplication> {
     public string currentUID { private set; get; }
 
 	void OnEnable () {
-        EventManager.StartListening(EventType.USER_CONFIRMED, delegate { UserConfirmed(); });
+        EventManager.StartListening(EventType.USER_CONFIRMED, UserConfirmed);
 	}
 
     void OnDisable() {
-        EventManager.StopListening(EventType.USER_CONFIRMED, delegate { UserConfirmed(); });
+        EventManager.StopListening(EventType.USER_CONFIRMED, UserConfirmed);
     }
 
-    public void SetGasolineValue(string val) {
-        gasolineValue = int.Parse(val);
-    }
+    void UserConfirmed(object val) {
+        int intValue = (int)val;
+        if (intValue == 0) return;
 
-    void UserConfirmed() {
-        if (gasolineValue == 0) return;
+        gasolineValue = intValue;
 
         GoToCardRead();
     }
