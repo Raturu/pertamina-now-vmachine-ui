@@ -34,6 +34,11 @@ public class WatchDog : MonoBehaviour {
         if (!port.IsOpen) Debug.LogError("PORT IS NOT OPENED.");
     }
 
+    void CleanUp() {
+        serialThread.Abort();
+        port.Close();
+    }
+
     void SerialRead() {
         while (true) {
             try {
@@ -47,11 +52,9 @@ public class WatchDog : MonoBehaviour {
 	void Start () {
         InitSerial();
         InitThread();
-        
 	}
 
     public void OnDisable() {
-        serialThread.Abort();
-        port.Close();
+        CleanUp();
     }
 }
