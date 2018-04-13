@@ -13,31 +13,27 @@ public enum EventType {
 public class ProgramEvent : UnityEvent<object> {
 }
 
-public class EventManager : Singleton<EventManager> {
+public class EventManager : MonoBehaviour {
 
     private Dictionary<EventType, ProgramEvent> eventDictionary;
 
-    //private static EventManager eventManager;
+    private static EventManager eventManager;
 
-    //public static EventManager instance {
-    //    get {
-    //        if (!eventManager) {
-    //            eventManager = FindObjectOfType(typeof(EventManager)) as EventManager;
+    public static EventManager instance {
+        get {
+            if (!eventManager) {
+                eventManager = FindObjectOfType(typeof(EventManager)) as EventManager;
 
-    //            if (!eventManager) {
-    //                Debug.LogError("There needs to be one active EventManger script, on a GameObject in the scene.");
-    //            }
-    //            else {
-    //                eventManager.Init();
-    //            }
-    //        }
+                if (!eventManager) {
+                    Debug.LogError("There needs to be one active EventManger script, on a GameObject in the scene.");
+                }
+                else {
+                    eventManager.Init();
+                }
+            }
 
-    //        return eventManager;
-    //    }
-    //}
-
-    void OnEnable() {
-        Init();
+            return eventManager;
+        }
     }
 
     void Init() {
