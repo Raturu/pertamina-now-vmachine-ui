@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.IO;
 using System.IO.Ports;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,9 +30,23 @@ public class WatchDog : MonoBehaviour {
         port.Handshake = Handshake.None;
         port.RtsEnable = true;
 
-        port.Open();
+        OpenPort();
 
         if (!port.IsOpen) Debug.LogError("PORT IS NOT OPENED.");
+    }
+
+    void OpenPort() {
+        try {
+            port.Open();
+        }
+        catch (IOException err) {
+            Debug.LogError(err);
+            Debug.LogError("Please check your COM port number.");
+        }
+        catch (UnauthorizedAccessException err) {
+            Debug.LogError(err);
+            Debug.LogError("Probably the COM port is currently being used.");
+        }
     }
 
     void CleanUp() {
@@ -54,7 +69,12 @@ public class WatchDog : MonoBehaviour {
         InitThread();
 	}
 
+    void OnEnable() {
+        EventManager.StartListening(EventType.TRANSACTION_REQUEST_SUCCESS, delegate { CleanUp(); });
+    }
+
     public void OnDisable() {
+        EventManager.StopListening(EventType.TRANSACTION_REQUEST_SUCCESS, delegate { CleanUp(); });
         CleanUp();
     }
 }

@@ -4,34 +4,40 @@ using System.Collections;
 using System.Collections.Generic;
 
 public enum EventType {
-    CARD_READ
+    USER_CONFIRMED,
+    CARD_READ,
+    TRANSACTION_REQUEST_SUCCESS
 }
 
 [System.Serializable]
 public class ProgramEvent : UnityEvent<object> {
 }
 
-public class EventManager : MonoBehaviour {
+public class EventManager : Singleton<EventManager> {
 
     private Dictionary<EventType, ProgramEvent> eventDictionary;
 
-    private static EventManager eventManager;
+    //private static EventManager eventManager;
 
-    public static EventManager instance {
-        get {
-            if (!eventManager) {
-                eventManager = FindObjectOfType(typeof(EventManager)) as EventManager;
+    //public static EventManager instance {
+    //    get {
+    //        if (!eventManager) {
+    //            eventManager = FindObjectOfType(typeof(EventManager)) as EventManager;
 
-                if (!eventManager) {
-                    Debug.LogError("There needs to be one active EventManger script, on a GameObject in the scene.");
-                }
-                else {
-                    eventManager.Init();
-                }
-            }
+    //            if (!eventManager) {
+    //                Debug.LogError("There needs to be one active EventManger script, on a GameObject in the scene.");
+    //            }
+    //            else {
+    //                eventManager.Init();
+    //            }
+    //        }
 
-            return eventManager;
-        }
+    //        return eventManager;
+    //    }
+    //}
+
+    void OnEnable() {
+        Init();
     }
 
     void Init() {
@@ -53,7 +59,7 @@ public class EventManager : MonoBehaviour {
     }
 
     public static void StopListening(EventType eventName, UnityAction<object> listener) {
-        if (eventManager == null) return;
+        if (instance == null) return;
         ProgramEvent thisEvent = null;
         if (instance.eventDictionary.TryGetValue(eventName, out thisEvent)) {
             thisEvent.RemoveListener(listener);
