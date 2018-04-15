@@ -58,7 +58,8 @@ public class WatchDog : MonoBehaviour {
         while (true) {
             try {
                 string uid = port.ReadLine();
-                EventManager.TriggerEvent(EventType.CARD_READ, uid);
+                Debug.Log("SERIAL RECEIVED: " + uid);
+                UnityMainThreadDispatcher.Instance().Enqueue(() => EventManager.TriggerEvent(EventType.SERIAL_RECEIVED, uid));
             }
             catch (TimeoutException) { }
         }
