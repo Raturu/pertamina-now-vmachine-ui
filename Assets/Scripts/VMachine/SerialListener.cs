@@ -7,7 +7,8 @@ using UnityEngine.Networking;
 public class SerialListener : MonoBehaviour {
 
     bool ValidateFormat(string uid) {
-        string regex = @"^([0-9A-Fa-f]{2}[:])*([0-9A-Fa-f]{2})$";
+        //string regex = @"^([0-9A-Fa-f]{2}[:])*([0-9A-Fa-f]{2})$"; // Old format
+        string regex = @"^([0-9A-Fa-f]{2})*([0-9A-Fa-f]{2})$";
         bool isValid = Regex.IsMatch(uid, regex);
 
         if (isValid)
