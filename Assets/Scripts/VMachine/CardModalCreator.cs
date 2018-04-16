@@ -9,6 +9,24 @@ public class CardModalCreator : MonoBehaviour {
         SceneManager.LoadScene("InputGasolineValue");
     }
 
+    void Start() {
+        GenerateTapEKTP();
+    }
+
+    void GenerateTapEKTP() {
+        PanelDetails panel = new PanelDetails();
+
+        panel.title = "Tempel E-KTP";
+        panel.question = "Tempelkan E-KTP Anda";
+
+        panel.alternativeButton = new PanelButtonDetails();
+        panel.alternativeButton.title = "Batalkan";
+        panel.alternativeButton.action = GoToInputGasolineValue;
+
+        ModalManager.instance.CloseModal();
+        ModalManager.instance.ShowModal(panel);
+    }
+
     void GenerateWaitForProcess() {
         PanelDetails panel = new PanelDetails();
 
