@@ -19,6 +19,10 @@ public class RequestData {
         this.requestValue = 0;
         this.freeMode = true;
     }
+
+    public string freeModeString() {
+        return (freeMode ? "TRUE" : "FALSE");
+    }
 }
 
 public class RequestCreator : MonoBehaviour {
@@ -46,9 +50,7 @@ public class RequestCreator : MonoBehaviour {
         Dictionary<string, string> formFields = new Dictionary<string, string>();
         formFields.Add("uid", requestData.uid);
         formFields.Add("request_value", requestData.requestValue.ToString());
-
-        if (requestData.freeMode)
-            formFields.Add("free_mode", "TRUE");
+        formFields.Add("free_mode", requestData.freeModeString());
 
         UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:8000/vrest/validate/", formFields);
         yield return new WaitForSeconds(2); // Simulate network delay :v
