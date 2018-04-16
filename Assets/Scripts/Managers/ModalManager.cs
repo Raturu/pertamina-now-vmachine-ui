@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class PanelButtonDetails {
     public string title;
+    public Sprite icon;
     public UnityAction action;
 }
 
@@ -27,6 +28,9 @@ public class ModalManager : Singleton<ModalManager> {
 
     public Text successButtonText;
     public Text alternativeButtonText;
+
+    public Image successButtonIcon;
+    public Image alternativeButtonIcon;
 
     //private static ModalManager modalPanel;
 
@@ -52,7 +56,7 @@ public class ModalManager : Singleton<ModalManager> {
         modalQuestion.text = details.question;
     }
 
-    void InitButton(Button button, Text buttonText, PanelButtonDetails details) {
+    void InitButton(Button button, Text buttonText, Image buttonIcon, PanelButtonDetails details) {
         if (details == null)
             return;
 
@@ -62,14 +66,16 @@ public class ModalManager : Singleton<ModalManager> {
         button.onClick.AddListener(details.action);
 
         buttonText.text = details.title;
+
+        buttonIcon.sprite = details.icon;
     }
 
     public void ShowModal(PanelDetails details) {
         InitModal();
         InitQuestion(details);
 
-        InitButton(successButton, successButtonText, details.successButton);
-        InitButton(alternativeButton, alternativeButtonText, details.alternativeButton);
+        InitButton(successButton, successButtonText, successButtonIcon, details.successButton);
+        InitButton(alternativeButton, alternativeButtonText, alternativeButtonIcon, details.alternativeButton);
     }
 
     public void CloseModal() {
