@@ -4,6 +4,15 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[System.Serializable]
+public class GasolineData {
+    public int id_spbu;
+    public int id_bbm;
+    public int id_spbu_bbm;
+    public int harga;
+    public string nama_bbm;
+}
+
 public class VMachineApplication : Singleton<VMachineApplication> {
 
     private string currentUID;
