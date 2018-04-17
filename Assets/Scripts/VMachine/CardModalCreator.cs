@@ -19,16 +19,22 @@ public class CardModalCreator : MonoBehaviour {
         GenerateTapEKTP();
     }
 
+    PanelButtonDetails GetCancelButton() {
+        PanelButtonDetails alternativeButton = new PanelButtonDetails();
+        alternativeButton.title = "Batalkan";
+        alternativeButton.action = GoToInputGasolineValue;
+        alternativeButton.icon = iconClose;
+
+        return alternativeButton;
+    }
+
     void GenerateTapEKTP() {
         PanelDetails panel = new PanelDetails();
 
         panel.title = "Tempel E-KTP";
         panel.question = "Tempelkan E-KTP Anda";
 
-        panel.alternativeButton = new PanelButtonDetails();
-        panel.alternativeButton.title = "Batalkan";
-        panel.alternativeButton.action = GoToInputGasolineValue;
-        panel.alternativeButton.icon = iconClose;
+        panel.alternativeButton = GetCancelButton();
 
         ModalManager.instance.CloseModal();
         ModalManager.instance.ShowModal(panel);
@@ -70,10 +76,7 @@ public class CardModalCreator : MonoBehaviour {
         panel.title = "Tempel E-KTP";
         panel.question = "Saldo Tidak Mencukupi\nSilakan Tempel E-KTP Lain";
 
-        panel.alternativeButton = new PanelButtonDetails();
-        panel.alternativeButton.title = "Batalkan";
-        panel.alternativeButton.action = GoToInputGasolineValue;
-        panel.alternativeButton.icon = iconClose;
+        panel.alternativeButton = GetCancelButton();
 
         ModalManager.instance.CloseModal();
         ModalManager.instance.ShowModal(panel);
@@ -85,10 +88,7 @@ public class CardModalCreator : MonoBehaviour {
         panel.title = "Tempel E-KTP";
         panel.question = "Transaksi Tidak Dapat Diproses\nSilakan Tempel E-KTP Anda";
 
-        panel.alternativeButton = new PanelButtonDetails();
-        panel.alternativeButton.title = "Batalkan";
-        panel.alternativeButton.action = GoToInputGasolineValue;
-        panel.alternativeButton.icon = iconClose;
+        panel.alternativeButton = GetCancelButton();
 
         ModalManager.instance.CloseModal();
         ModalManager.instance.ShowModal(panel);
