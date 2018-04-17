@@ -27,6 +27,8 @@ public class RequestData {
 
 public class RequestCreator : MonoBehaviour {
 
+    public string apiKey = "CODEX@123";
+
     //void Start() {
     //    RequestData rdata = new RequestData("04:22:2A:E2:7C:28:80", 20000);
     //    StartCoroutine(Upload(rdata));
@@ -52,12 +54,17 @@ public class RequestCreator : MonoBehaviour {
         formFields.Add("request_value", requestData.requestValue.ToString());
         formFields.Add("free_mode", requestData.freeModeString());
 
-        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:8000/vrest/validate/", formFields);
+        //UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:8000/vrest/validate/", formFields); // Local server test
+        UnityWebRequest www = UnityWebRequest.Post("http://159.65.139.83/pertamina-now/api/Collection/requestBuy/", formFields); // Remote server
+        www.SetRequestHeader("x-api-key", apiKey);
+
         yield return new WaitForSeconds(2); // Simulate network delay :v
         yield return www.SendWebRequest();
 
         if (www.isNetworkError || www.isHttpError) {
             Debug.Log(www.error);
+            Debug.Log(www.downloadHandler.text);
+            EventManager.TriggerEvent(EventType.TRANSACTION_REQUEST_ERROR, null);
         }
         else {
             Debug.Log("Transaction Request Complete!");
