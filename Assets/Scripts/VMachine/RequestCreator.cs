@@ -58,6 +58,8 @@ public class RequestCreator : MonoBehaviour {
         UnityWebRequest www = UnityWebRequest.Post("http://159.65.139.83/pertamina-now/api/Collection/requestBuy/", formFields); // Remote server
         www.SetRequestHeader("x-api-key", apiKey);
 
+        www.timeout = 5; // 5 seconds timeout
+
         yield return new WaitForSeconds(2); // Simulate network delay :v
         yield return www.SendWebRequest();
 
@@ -69,6 +71,7 @@ public class RequestCreator : MonoBehaviour {
         else {
             Debug.Log("Transaction Request Complete!");
             Debug.Log(www.downloadHandler.text);
+            Debug.Log(www.error);
             EventManager.TriggerEvent(EventType.TRANSCATION_REQUEST_RESPONSE_RECEIVED, www.downloadHandler.text);
         }
     }
