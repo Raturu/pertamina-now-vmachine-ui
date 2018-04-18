@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -51,8 +52,15 @@ public class ResponseProcessor : MonoBehaviour {
 
     void ParseRespose(object responseObject) {
         string responseString = (string)responseObject;
+        Response response = new Response();
 
-        Response response = JsonUtility.FromJson<Response>(responseString);
+        try {
+            response = JsonUtility.FromJson<Response>(responseString);
+        }
+        catch (ArgumentException e) {
+            Debug.LogError("Invalid JSON Response.");
+            Debug.LogError(e);
+        }
 
         ProcessResponse(response);
     }
