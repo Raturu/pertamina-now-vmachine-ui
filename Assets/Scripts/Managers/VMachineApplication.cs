@@ -42,6 +42,22 @@ public class VMachineApplication : Singleton<VMachineApplication> {
 
     private GasolineData[] gasolineSold;
 
+    // Dummy transaction
+    //void Start() {
+    //    currentTransaction = new TransactionData();
+    //    currentTransaction.currentGasoline = new GasolineData();
+    //    currentTransaction.currentGasoline.harga = 6000;
+    //    currentTransaction.currentGasoline.nama_bbm = "Premium";
+    //    currentTransaction.currentGasoline.id_spbu = 1;
+    //    currentTransaction.currentGasoline.id_bbm = 1;
+    //    currentTransaction.currentGasoline.id_spbu_bbm = 1;
+
+    //    currentTransaction.currentUID = "04222AE27C2880";
+    //    currentTransaction.gasolineValueInRupiah = 20000;
+    //    currentTransaction.maxUsageInRupiah = 20000;
+    //    currentTransaction.maxUsageInLiter = 3.333333;
+    //}
+
     void InitTransaction(object gasData) {
         GasolineData currentGasoline = (GasolineData)gasData;
 
@@ -144,6 +160,8 @@ public class VMachineApplication : Singleton<VMachineApplication> {
 
     void FillFinish() {
         Debug.Log("FIIIIIIIIINISH");
+        Debug.Log(currentTransaction.realUsage);
+        Debug.Log(currentTransaction.realLiter);
     }
 
     void OnEnable() {

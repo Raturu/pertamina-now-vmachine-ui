@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Filler : MonoBehaviour {
 
-    public double slowFillSpeed = 0.1f;
+    public double slowFillSpeed = 0.01f;
+    private bool slowFill = false;
 
     public void SlowFill() {
         double currentLiter = VMachineApplication.instance.GetCurrentRealLiter();
@@ -18,5 +19,15 @@ public class Filler : MonoBehaviour {
 
     public void FinishFill() {
         EventManager.TriggerEvent(EventType.FINISH_FILL, null);
+    }
+
+    public void ToggleSlowFill() {
+        slowFill = !slowFill;
+    }
+
+    void Update() {
+        if (slowFill) {
+            SlowFill();
+        }
     }
 }

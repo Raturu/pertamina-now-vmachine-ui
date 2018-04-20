@@ -136,7 +136,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 172930692}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.4299927, y: 273.68192, z: 0}
+  m_LocalPosition: {x: -1.4299927, y: 274.46597, z: 0}
   m_LocalScale: {x: 0.711453, y: 0.711453, z: 0.711453}
   m_Children:
   - {fileID: 751397182}
@@ -295,7 +295,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 328613821}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 63.940002, y: 151.58191, z: 0}
+  m_LocalPosition: {x: 63.940002, y: 152.36597, z: 0}
   m_LocalScale: {x: 0.7114594, y: 0.7114594, z: 0.7114594}
   m_Children:
   - {fileID: 716377834}
@@ -1109,18 +1109,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1443899823}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1746226460}
-        m_MethodName: SlowFill
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1443899826
@@ -1131,11 +1120,45 @@ MonoBehaviour:
   m_GameObject: {fileID: 1443899821}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0076550482473414784adffaf010fdf3, type: 3}
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inRupiahMode: 0
-  input: {fileID: 0}
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1746226460}
+          m_MethodName: ToggleSlowFill
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1746226460}
+          m_MethodName: ToggleSlowFill
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!1 &1547920038
 GameObject:
   m_ObjectHideFlags: 0
@@ -1218,8 +1241,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1547920038}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 295.5, y: 166, z: 0}
-  m_LocalScale: {x: 0.43265006, y: 0.43265006, z: 0.43265006}
+  m_LocalPosition: {x: 536.5, y: 302, z: 0}
+  m_LocalScale: {x: 0.7855051, y: 0.7855051, z: 0.7855051}
   m_Children:
   - {fileID: 469247076}
   - {fileID: 1924422927}
@@ -1374,7 +1397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 157ec987ff24c0040806fcffa63838fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slowFillSpeed: 0.10000000149011612
+  slowFillSpeed: 0.01
 --- !u!1 &1773855570
 GameObject:
   m_ObjectHideFlags: 0
@@ -1448,7 +1471,6 @@ GameObject:
   - component: {fileID: 1864314483}
   - component: {fileID: 1864314482}
   - component: {fileID: 1864314481}
-  - component: {fileID: 1864314480}
   m_Layer: 5
   m_Name: Finish Fill
   m_TagString: Untagged
@@ -1475,19 +1497,6 @@ RectTransform:
   m_AnchoredPosition: {x: 497, y: -255}
   m_SizeDelta: {x: 300, y: 120}
   m_Pivot: {x: 0.5, y: 0}
---- !u!114 &1864314480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1864314478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0076550482473414784adffaf010fdf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inRupiahMode: 0
-  input: {fileID: 0}
 --- !u!114 &1864314481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1584,7 +1593,6 @@ GameObject:
   - component: {fileID: 1906459442}
   - component: {fileID: 1906459441}
   - component: {fileID: 1906459440}
-  - component: {fileID: 1906459439}
   m_Layer: 5
   m_Name: Instant Fill
   m_TagString: Untagged
@@ -1611,19 +1619,6 @@ RectTransform:
   m_AnchoredPosition: {x: -43, y: -255}
   m_SizeDelta: {x: 300, y: 120}
   m_Pivot: {x: 0.5, y: 0}
---- !u!114 &1906459439
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1906459437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0076550482473414784adffaf010fdf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inRupiahMode: 0
-  input: {fileID: 0}
 --- !u!114 &1906459440
 MonoBehaviour:
   m_ObjectHideFlags: 0
