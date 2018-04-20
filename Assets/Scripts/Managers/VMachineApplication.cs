@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -17,9 +18,13 @@ public class GasolineData {
 public class TransactionData {
     public GasolineData currentGasoline;
     public string currentUID;
-    public int gasolineValue;
-    public int maxUsage;
-    public int gasolineValueInLiter;
+    public int gasolineValueInRupiah;
+    public int maxUsageInRupiah;
+    public double maxUsageInLiter;
+    public bool freeMode = false;
+
+    public int realUsage;
+    public double realLiter;
 }
 
 public class VMachineApplication : Singleton<VMachineApplication> {
@@ -39,22 +44,35 @@ public class VMachineApplication : Singleton<VMachineApplication> {
 
     void InitTransaction(object gasData) {
         GasolineData currentGasoline = (GasolineData)gasData;
+
         currentTransaction = new TransactionData();
         currentTransaction.currentGasoline = currentGasoline;
 
         GoToSelectValue();
     }
 
-    void UserConfirmed(object val) {
-        int intValue = (int)val;
-        if (intValue == 0) return;
+    void UserConfirmed(object param) {
+        UserInput userInput = (UserInput)param;
 
-        currentTransaction.gasolineValue = intValue;
+        if (userInput.freeMode) {
+            currentTransaction.freeMode = true;
+        }
+        else if (userInput.inRupiahMode) {
+            if (userInput.gasolineValueInRupiah == 0) return;
+
+            currentTransaction.gasolineValueInRupiah = userInput.gasolineValueInRupiah;
+        }
+        else {
+            if (userInput.gasolineValueInLiter == 0) return;
+
+            currentTransaction.gasolineValueInRupiah = CountRupiah(userInput.gasolineValueInLiter);
+        }
 
         GoToCardRead();
     }
 
     void ResetTransactionData() {
+        Debug.Log("Transaction data reset");
         //currentTransaction.currentUID = "";
         //currentTransaction.gasolineValue = 0;
         //currentTransaction.gasolineValueInLiter = 0;
@@ -65,7 +83,7 @@ public class VMachineApplication : Singleton<VMachineApplication> {
         string uidString = (string)uid;
         currentTransaction.currentUID = uidString;
 
-        RequestData requestData = new RequestData(currentTransaction.currentUID, currentTransaction.gasolineValue);
+        RequestData requestData = new RequestData(currentTransaction.currentUID, currentTransaction.gasolineValueInRupiah, currentTransaction.freeMode);
 
         EventManager.TriggerEvent(EventType.TRANSACTION_REQUEST_INITIATION, requestData);
     }
@@ -73,7 +91,8 @@ public class VMachineApplication : Singleton<VMachineApplication> {
     void SetMaxUsage(object usageObject) {
         int usageInt = (int)usageObject;
 
-        currentTransaction.maxUsage = usageInt;
+        currentTransaction.maxUsageInRupiah = usageInt;
+        currentTransaction.maxUsageInLiter = CountLiter(usageInt);
     }
 
     public int GetSPBUID() {
@@ -93,12 +112,48 @@ public class VMachineApplication : Singleton<VMachineApplication> {
         SceneManager.LoadScene("InputGasolineValue");
     }
 
+    double CountLiter(int rupiah) {
+        double liter = Convert.ToDouble(rupiah) / currentTransaction.currentGasoline.harga;
+
+        return liter;
+    }
+
+    int CountRupiah(double liter) {
+        double rupiahDouble = liter * currentTransaction.currentGasoline.harga;
+        int rupiah = Convert.ToInt32(rupiahDouble);
+
+        return rupiah;
+    }
+
+    public void SetUsage(double liter) {
+        if (liter > currentTransaction.maxUsageInLiter)
+            liter = currentTransaction.maxUsageInLiter;
+
+        currentTransaction.realLiter = liter;
+
+        currentTransaction.realUsage = CountRupiah(liter);
+    }
+
+    public double GetCurrentRealLiter() {
+        return currentTransaction.realLiter;
+    }
+
+    public int GetCurrentRealRupiah() {
+        return currentTransaction.realUsage;
+    }
+
+    void FillFinish() {
+        Debug.Log("FIIIIIIIIINISH");
+    }
+
     void OnEnable() {
         EventManager.StartListening(EventType.USER_CONFIRMED, UserConfirmed);
         EventManager.StartListening(EventType.DATA_COMPLETE, InitiateRequest);
         EventManager.StartListening(EventType.MAX_USAGE_CONTROL, SetMaxUsage);
         EventManager.StartListening(EventType.GASOLINE_LOADED, SetGasolineSold);
         EventManager.StartListening(EventType.GASOLINE_SELECTED, InitTransaction);
+        EventManager.StartListening(EventType.TRANSACTION_CANCELLED, delegate { ResetTransactionData(); });
+        EventManager.StartListening(EventType.FINISH_FILL, delegate { FillFinish(); });
     }
 
     void OnDisable() {
@@ -107,5 +162,7 @@ public class VMachineApplication : Singleton<VMachineApplication> {
         EventManager.StopListening(EventType.MAX_USAGE_CONTROL, SetMaxUsage);
         EventManager.StopListening(EventType.GASOLINE_LOADED, SetGasolineSold);
         EventManager.StopListening(EventType.GASOLINE_SELECTED, InitTransaction);
+        EventManager.StopListening(EventType.TRANSACTION_CANCELLED, delegate { ResetTransactionData(); });
+        EventManager.StopListening(EventType.FINISH_FILL, delegate { FillFinish(); });
     }
 }

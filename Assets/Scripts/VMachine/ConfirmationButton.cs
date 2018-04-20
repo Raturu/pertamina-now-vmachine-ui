@@ -4,9 +4,21 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class UserInput {
+    public bool inRupiahMode;
+    public int gasolineValueInRupiah;
+    public double gasolineValueInLiter;
+    public bool freeMode = false;
+}
+
 public class ConfirmationButton : MonoBehaviour {
 
+    public bool inRupiahMode;
     public InputField input;
+
+    void Start() {
+        inRupiahMode = true;
+    }
 
     public void ConfirmPressed() {
         string value = input.text;
@@ -16,8 +28,22 @@ public class ConfirmationButton : MonoBehaviour {
             return;
         }
 
-        int gasolineValue = int.Parse(value);
+        UserInput userInput = new UserInput();
 
-        EventManager.TriggerEvent(EventType.USER_CONFIRMED, gasolineValue);
+        userInput.inRupiahMode = inRupiahMode;
+
+        if (inRupiahMode)
+            userInput.gasolineValueInRupiah = int.Parse(value);
+        else
+            userInput.gasolineValueInLiter = double.Parse(value);
+
+        EventManager.TriggerEvent(EventType.USER_CONFIRMED, userInput);
+    }
+
+    public void UserFreeMode() {
+        UserInput userInput = new UserInput();
+        userInput.freeMode = true;
+
+        EventManager.TriggerEvent(EventType.USER_CONFIRMED, userInput);
     }
 }

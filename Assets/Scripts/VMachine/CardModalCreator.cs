@@ -10,9 +10,17 @@ public class CardModalCreator : MonoBehaviour {
     public Sprite iconClose;
     public Sprite iconRefresh;
 
+    //void GoToInputGasolineValue() {
+    //    SceneManager.LoadScene("InputGasolineValue");
+    //}
 
-    void GoToInputGasolineValue() {
-        SceneManager.LoadScene("InputGasolineValue");
+    void WaitGoToFillScene() {
+        StartCoroutine(GoToFillScene());
+    }
+
+    void GoToSelectGasolineType() {
+        EventManager.TriggerEvent(EventType.TRANSACTION_CANCELLED, null);
+        SceneManager.LoadScene("SelectGasolineType");
     }
 
     void Start() {
@@ -22,7 +30,7 @@ public class CardModalCreator : MonoBehaviour {
     PanelButtonDetails GetCancelButton() {
         PanelButtonDetails alternativeButton = new PanelButtonDetails();
         alternativeButton.title = "Batalkan";
-        alternativeButton.action = GoToInputGasolineValue;
+        alternativeButton.action = GoToSelectGasolineType;
         alternativeButton.icon = iconClose;
 
         return alternativeButton;
@@ -63,9 +71,11 @@ public class CardModalCreator : MonoBehaviour {
 
         panel.successButton = new PanelButtonDetails();
         panel.successButton.title = "Sukses";
-        panel.successButton.action = GoToInputGasolineValue;
+        //panel.successButton.action = WaitGoToFillScene;
         panel.successButton.icon = iconConfirm;
 
+
+        WaitGoToFillScene(); //TODO: Move this somewhere else
         ModalManager.instance.CloseModal();
         ModalManager.instance.ShowModal(panel);
     }
@@ -92,6 +102,11 @@ public class CardModalCreator : MonoBehaviour {
 
         ModalManager.instance.CloseModal();
         ModalManager.instance.ShowModal(panel);
+    }
+
+    IEnumerator GoToFillScene() {
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene("GasolineFill");
     }
 
     void OnEnable() {

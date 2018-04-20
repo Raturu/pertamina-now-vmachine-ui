@@ -6,8 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/SelectGasolineType.unity
+    guid: e3802f0b55bec434f96d97f69b895218
+  - enabled: 1
     path: Assets/Scenes/InputGasolineValue.unity
     guid: 348d4a951dde4b44a802faad2cef48ac
   - enabled: 1
     path: Assets/Scenes/CardRead.unity
     guid: 6828680f8bb5906459904aa5876b51ef
+  - enabled: 1
+    path: Assets/Scenes/GasolineFill.unity
+    guid: 60ead11b7aa316a4f904ca4a1d7e7eb3

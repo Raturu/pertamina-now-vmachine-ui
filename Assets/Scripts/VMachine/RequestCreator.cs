@@ -8,17 +8,23 @@ public class RequestData {
     public int requestValue;
     public bool freeMode;
 
-    public RequestData(string uid, int requestValue) {
+    public RequestData(string uid, int requestValue, bool freeMode) {
         this.uid = uid;
         this.requestValue = requestValue;
-        this.freeMode = false;
+        this.freeMode = freeMode;
     }
 
-    public RequestData(string uid) {
-        this.uid = uid;
-        this.requestValue = 0;
-        this.freeMode = true;
-    }
+    //public RequestData(string uid, int requestValue) {
+    //    this.uid = uid;
+    //    this.requestValue = requestValue;
+    //    this.freeMode = false;
+    //}
+
+    //public RequestData(string uid) {
+    //    this.uid = uid;
+    //    this.requestValue = 0;
+    //    this.freeMode = true;
+    //}
 
     public string freeModeString() {
         return (freeMode ? "TRUE" : "FALSE");
