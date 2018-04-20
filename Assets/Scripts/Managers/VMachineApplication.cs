@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 [System.Serializable]
@@ -29,6 +30,8 @@ public class TransactionData {
 
 public class VMachineApplication : Singleton<VMachineApplication> {
 
+    public string apiKey = "CODEX@123";
+
     [SerializeField]
     private int id_spbu;
 
@@ -37,10 +40,12 @@ public class VMachineApplication : Singleton<VMachineApplication> {
     ////public int gasolineValueInLiter { private set; get; }
     //public int maxUsage { private set; get; }
 
-    List<TransactionData> pendingTransactionUsage;
+    List<TransactionData> pendingTransactionUsage = new List<TransactionData>();
     TransactionData currentTransaction;
 
     private GasolineData[] gasolineSold;
+
+    Coroutine transactionReporter;
 
     // Dummy transaction
     //void Start() {
@@ -128,6 +133,10 @@ public class VMachineApplication : Singleton<VMachineApplication> {
         SceneManager.LoadScene("InputGasolineValue");
     }
 
+    void GoToSelectGasoline() {
+        SceneManager.LoadScene("SelectGasolineType");
+    }
+
     double CountLiter(int rupiah) {
         double liter = Convert.ToDouble(rupiah) / currentTransaction.currentGasoline.harga;
 
@@ -158,10 +167,65 @@ public class VMachineApplication : Singleton<VMachineApplication> {
         return currentTransaction.realUsage;
     }
 
+    public double GetCurrentRealLiterForView() {
+        if (currentTransaction == null) return 0;
+
+        return currentTransaction.realLiter;
+    }
+
+    public int GetCurrentRealRupiahForView() {
+        if (currentTransaction == null) return 0;
+
+        return currentTransaction.realUsage;
+    }
+
     void FillFinish() {
         Debug.Log("FIIIIIIIIINISH");
         Debug.Log(currentTransaction.realUsage);
         Debug.Log(currentTransaction.realLiter);
+
+        pendingTransactionUsage.Add(currentTransaction);
+        ResetTransactionData();
+        GoToSelectGasoline();
+    }
+
+    void Update() {
+        if (pendingTransactionUsage.Count != 0) {
+            if (transactionReporter == null) {
+                TransactionData data = pendingTransactionUsage[0];
+                transactionReporter = StartCoroutine(ReportTransaction(data));
+            }
+        }
+    }
+
+    IEnumerator ReportTransaction(TransactionData transactionData) {
+        Dictionary<string, string> formFields = new Dictionary<string, string>();
+        formFields.Add("uid", transactionData.currentUID);
+        formFields.Add("id_spbu_bbm", transactionData.currentGasoline.id_spbu_bbm.ToString());
+        formFields.Add("real_usage_rupiah", transactionData.realUsage.ToString());
+        formFields.Add("real_usage_liter", transactionData.realLiter.ToString());
+
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:8000/vrest/realusage/", formFields); // Local server test
+        //UnityWebRequest www = UnityWebRequest.Post("http://159.65.139.83/pertamina-now/api/Collection/requestBuy/", formFields); // Remote server
+        www.SetRequestHeader("x-api-key", apiKey);
+
+        www.timeout = 5; // 5 seconds timeout
+
+        yield return new WaitForSeconds(2); // Simulate network delay :v
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError) {
+            Debug.Log(www.error);
+            Debug.Log(www.downloadHandler.text);
+            transactionReporter = null;
+        }
+        else {
+            Debug.Log("Transaction Request Complete!");
+            Debug.Log(www.downloadHandler.text);
+            Debug.Log(www.error);
+            transactionReporter = null;
+            pendingTransactionUsage.Remove(transactionData);
+        }
     }
 
     void OnEnable() {

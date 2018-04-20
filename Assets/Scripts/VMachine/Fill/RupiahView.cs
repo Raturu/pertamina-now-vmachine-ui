@@ -16,7 +16,7 @@ public class RupiahView : MonoBehaviour {
 
 
 	void Update () {
-        int rupiah = VMachineApplication.instance.GetCurrentRealRupiah();
+        int rupiah = VMachineApplication.instance.GetCurrentRealRupiahForView();
 
         FormatValue(rupiah.ToString());
 	}

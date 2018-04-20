@@ -16,7 +16,7 @@ public class LiterView : MonoBehaviour {
 
 
     void Update() {
-        double liter = VMachineApplication.instance.GetCurrentRealLiter();
+        double liter = VMachineApplication.instance.GetCurrentRealLiterForView();
 
         literText.text = liter.ToString("0.##");
         //FormatValue(liter.ToString());
