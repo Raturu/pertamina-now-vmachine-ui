@@ -9,7 +9,7 @@ public class PopulateType : MonoBehaviour {
 
     void GenerateButton(GasolineData data) {
         GameObject newButton = Instantiate(typeButton, buttonHolder.transform);
-        TypeButtonModifier buttonModifier = newButton.GetComponent<TypeButtonModifier>();
+        GasolineTypeData buttonModifier = newButton.GetComponent<GasolineTypeData>();
 
         buttonModifier.gasolineData = data;
     }

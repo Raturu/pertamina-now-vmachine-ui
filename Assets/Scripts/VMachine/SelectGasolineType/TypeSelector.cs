@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class TypeSelector : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private GasolineTypeData gasTypeData;
+
+    void Start() {
+        gasTypeData = GetComponent<GasolineTypeData>();
+    }
+
+    public void Clicked() {
+        GasolineData gasData = gasTypeData.gasolineData;
+
+        EventManager.TriggerEvent(EventType.GASOLINE_SELECTED, gasData);
+    }
 }

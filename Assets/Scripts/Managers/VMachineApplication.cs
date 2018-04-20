@@ -14,38 +14,58 @@ public class GasolineData {
     public Sprite button_image;
 }
 
+public class TransactionData {
+    public GasolineData currentGasoline;
+    public string currentUID;
+    public int gasolineValue;
+    public int maxUsage;
+    public int gasolineValueInLiter;
+}
+
 public class VMachineApplication : Singleton<VMachineApplication> {
 
     [SerializeField]
     private int id_spbu;
 
-    private string currentUID;
-    private int gasolineValue;
-    //public int gasolineValueInLiter { private set; get; }
-    public int maxUsage { private set; get; }
+    //private string currentUID;
+    //private int gasolineValue;
+    ////public int gasolineValueInLiter { private set; get; }
+    //public int maxUsage { private set; get; }
+
+    List<TransactionData> pendingTransactionUsage;
+    TransactionData currentTransaction;
 
     private GasolineData[] gasolineSold;
+
+    void InitTransaction(object gasData) {
+        GasolineData currentGasoline = (GasolineData)gasData;
+        currentTransaction = new TransactionData();
+        currentTransaction.currentGasoline = currentGasoline;
+
+        GoToSelectValue();
+    }
 
     void UserConfirmed(object val) {
         int intValue = (int)val;
         if (intValue == 0) return;
 
-        gasolineValue = intValue;
+        currentTransaction.gasolineValue = intValue;
 
         GoToCardRead();
     }
 
     void ResetTransactionData() {
-        currentUID = "";
-        gasolineValue = 0;
-        //gasolineValueInLiter = 0;
+        //currentTransaction.currentUID = "";
+        //currentTransaction.gasolineValue = 0;
+        //currentTransaction.gasolineValueInLiter = 0;
+        currentTransaction = null;
     }
 
     void InitiateRequest(object uid) {
         string uidString = (string)uid;
-        currentUID = uidString;
+        currentTransaction.currentUID = uidString;
 
-        RequestData requestData = new RequestData(currentUID, gasolineValue);
+        RequestData requestData = new RequestData(currentTransaction.currentUID, currentTransaction.gasolineValue);
 
         EventManager.TriggerEvent(EventType.TRANSACTION_REQUEST_INITIATION, requestData);
     }
@@ -53,7 +73,7 @@ public class VMachineApplication : Singleton<VMachineApplication> {
     void SetMaxUsage(object usageObject) {
         int usageInt = (int)usageObject;
 
-        maxUsage = usageInt;
+        currentTransaction.maxUsage = usageInt;
     }
 
     public int GetSPBUID() {
@@ -69,11 +89,16 @@ public class VMachineApplication : Singleton<VMachineApplication> {
         SceneManager.LoadScene("CardRead");
     }
 
+    void GoToSelectValue() {
+        SceneManager.LoadScene("InputGasolineValue");
+    }
+
     void OnEnable() {
         EventManager.StartListening(EventType.USER_CONFIRMED, UserConfirmed);
         EventManager.StartListening(EventType.DATA_COMPLETE, InitiateRequest);
         EventManager.StartListening(EventType.MAX_USAGE_CONTROL, SetMaxUsage);
         EventManager.StartListening(EventType.GASOLINE_LOADED, SetGasolineSold);
+        EventManager.StartListening(EventType.GASOLINE_SELECTED, InitTransaction);
     }
 
     void OnDisable() {
@@ -81,5 +106,6 @@ public class VMachineApplication : Singleton<VMachineApplication> {
         EventManager.StopListening(EventType.DATA_COMPLETE, InitiateRequest);
         EventManager.StopListening(EventType.MAX_USAGE_CONTROL, SetMaxUsage);
         EventManager.StopListening(EventType.GASOLINE_LOADED, SetGasolineSold);
+        EventManager.StopListening(EventType.GASOLINE_SELECTED, InitTransaction);
     }
 }
