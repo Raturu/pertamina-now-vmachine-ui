@@ -211,7 +211,6 @@ public class VMachineApplication : Singleton<VMachineApplication> {
 
         www.timeout = 5; // 5 seconds timeout
 
-        yield return new WaitForSeconds(2); // Simulate network delay :v
         yield return www.SendWebRequest();
 
         if (www.isNetworkError || www.isHttpError) {
